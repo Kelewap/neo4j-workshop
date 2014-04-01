@@ -1,4 +1,4 @@
-.idea/*
+neo4j-workshop/.idea/*
 *.iml
-target/*
+neo4j-workshop/target/*
 *~
