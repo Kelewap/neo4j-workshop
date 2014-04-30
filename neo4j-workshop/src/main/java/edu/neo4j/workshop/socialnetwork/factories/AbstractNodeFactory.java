@@ -2,6 +2,7 @@ package edu.neo4j.workshop.socialnetwork.factories;
 
 import edu.neo4j.workshop.socialnetwork.NotUniqueException;
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.index.Index;
 
@@ -31,8 +32,11 @@ public abstract class AbstractNodeFactory {
         for (Map.Entry<String, Object> stringObjectEntry : objects.entrySet()) {
             node.setProperty(stringObjectEntry.getKey(), stringObjectEntry.getValue());
         }
+        node.addLabel(getLabel());
         return node;
     }
+
+    protected abstract Label getLabel();
 
     public abstract String getIndexProperty();
 

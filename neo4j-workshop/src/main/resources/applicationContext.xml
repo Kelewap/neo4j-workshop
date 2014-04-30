@@ -12,4 +12,39 @@
     <bean id="graphDatabaseFactory" class="edu.neo4j.workshop.GraphDatabaseFactory">
         <constructor-arg value="${dbPath}"/>
     </bean>
+
+    <bean id="peopleUpload" class="edu.neo4j.workshop.socialnetwork.uploading.PeopleUpload">
+        <constructor-arg value="${peopleList}"/>
+    </bean>
+
+    <bean id="schoolUpload" class="edu.neo4j.workshop.socialnetwork.uploading.SchoolUpload">
+        <constructor-arg value="${schoolList}"/>
+    </bean>
+
+    <bean id="workCategoryUpload" class="edu.neo4j.workshop.socialnetwork.uploading.WorkCategoryUpload">
+        <constructor-arg value="${workCategoryList}"/>
+    </bean>
+
+    <bean id="knowsUpload" class="edu.neo4j.workshop.socialnetwork.uploading.KnowsUpload">
+        <constructor-arg index="0" value="${knowsAssociatesList}"/>
+        <constructor-arg index="1" ref="personDAO"/>
+    </bean>
+
+    <bean id="studyingRelationshipUpload" class="edu.neo4j.workshop.socialnetwork.uploading.StudyingRelationshipUploadImpl">
+        <constructor-arg index="0" value="${studying.csv}"/>
+        <constructor-arg index="1" ref="personDAO"/>
+        <constructor-arg index="2" ref="schoolDAO"/>
+    </bean>
+
+    <bean id="graduatedRelationshipUpload" class="edu.neo4j.workshop.socialnetwork.uploading.GraduatedRelationshipUploadImpl">
+        <constructor-arg index="0" value="${graduated.csv}"/>
+        <constructor-arg index="1" ref="personDAO"/>
+        <constructor-arg index="2" ref="schoolDAO"/>
+    </bean>
+
+    <bean id="workOnRelationshipUpload" class="edu.neo4j.workshop.socialnetwork.uploading.WorkOnRelationshipUpload">
+        <constructor-arg index="0" value="${workon.csv}"/>
+        <constructor-arg index="1" ref="personDAO"/>
+        <constructor-arg index="2" ref="workCategoryDAO"/>
+    </bean>
 </beans>
