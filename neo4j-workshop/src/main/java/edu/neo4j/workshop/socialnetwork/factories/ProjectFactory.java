@@ -25,7 +25,7 @@ public class ProjectFactory extends AbstractNodeFactory {
     }
 
     public Node createProject(String name, Date startTime, Date endTime) {
-        final Node node = createNode(ImmutableMap.<String, Object>of("name", name, "startTime", startTime, "endTime", endTime));
+        final Node node = createNode(ImmutableMap.<String, Object>of("name", name, "startTime", startTime.getTime(), "endTime", endTime.getTime()));
 
         return indexNode(node);
     }
