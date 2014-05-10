@@ -2,6 +2,8 @@ __author__ = 'partyks'
 from collections import namedtuple
 import random
 
+levels = ["a1", "a2", "b1", "b2", "c1", "c2"]
+
 class AssociationAbstract(object):
     @staticmethod
     def generateAssociations(list1, list2, minimum, maximum):
@@ -47,4 +49,9 @@ workon = AssociationAbstract.generateAssociations(names, categories, 1 ,1)
 workon = [associate + (str(random.randint(1,8)),) for associate in workon]
 persistAssociates("./../workon.csv", workon)
 
-
+languages = getEntities("./../languages.csv")
+lAssociations = AssociationAbstract.generateAssociations(names, languages, 1, 3)
+lAssociationsWithLevels = []
+for association in lAssociations:
+    lAssociationsWithLevels.append(association + tuple(random.sample(levels, 1)))
+persistAssociates("./../personLanguages.csv", lAssociationsWithLevels)

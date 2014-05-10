@@ -25,6 +25,10 @@
         <constructor-arg value="${workCategoryList}"/>
     </bean>
 
+    <bean id="languageUpload" class="edu.neo4j.workshop.socialnetwork.uploading.LanguageUpload">
+        <constructor-arg value="${languages.csv}"/>
+    </bean>
+
     <bean id="knowsUpload" class="edu.neo4j.workshop.socialnetwork.uploading.KnowsUpload">
         <constructor-arg index="0" value="${knowsAssociatesList}"/>
         <constructor-arg index="1" ref="personDAO"/>
@@ -46,5 +50,11 @@
         <constructor-arg index="0" value="${workon.csv}"/>
         <constructor-arg index="1" ref="personDAO"/>
         <constructor-arg index="2" ref="workCategoryDAO"/>
+    </bean>
+
+    <bean id="personLanguageUpload" class="edu.neo4j.workshop.socialnetwork.uploading.PersonLanguageUpload">
+        <constructor-arg index="0" value="${personLanguages.csv}"/>
+        <constructor-arg index="1" ref="personDAO"/>
+        <constructor-arg index="2" ref="languageDAO"/>
     </bean>
 </beans>
