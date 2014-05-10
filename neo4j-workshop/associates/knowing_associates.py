@@ -1,6 +1,7 @@
 __author__ = 'partyks'
 from collections import namedtuple
 import random
+from datetime import date
 
 levels = ["a1", "a2", "b1", "b2", "c1", "c2"]
 
@@ -55,3 +56,17 @@ lAssociationsWithLevels = []
 for association in lAssociations:
     lAssociationsWithLevels.append(association + tuple(random.sample(levels, 1)))
 persistAssociates("./../personLanguages.csv", lAssociationsWithLevels)
+
+#generate projects:
+projects = []
+with open("./../projects.csv", "wt") as file:
+    for i in range(1024):
+        #1975-2002
+        dateStart = date.fromordinal(random.randint(721150, 731150))
+        dateEnd = date.fromordinal(random.randint(dateStart.toordinal(), 731150))
+        project = ("Project" + str(i), str(dateStart), str(dateEnd))
+        projects.append(project[0])
+        print >> file, ",".join(project)
+
+projectsAssociations = AssociationAbstract.generateAssociations(projects, names, 3, 10)
+persistAssociates("./../personProject.csv", projectsAssociations)

@@ -34,6 +34,10 @@
         <constructor-arg index="1" ref="personDAO"/>
     </bean>
 
+    <bean id="projectsUpload" class="edu.neo4j.workshop.socialnetwork.uploading.ProjectUpload">
+        <constructor-arg value="${projects.csv}"/>
+    </bean>
+
     <bean id="studyingRelationshipUpload" class="edu.neo4j.workshop.socialnetwork.uploading.StudyingRelationshipUploadImpl">
         <constructor-arg index="0" value="${studying.csv}"/>
         <constructor-arg index="1" ref="personDAO"/>
@@ -56,5 +60,11 @@
         <constructor-arg index="0" value="${personLanguages.csv}"/>
         <constructor-arg index="1" ref="personDAO"/>
         <constructor-arg index="2" ref="languageDAO"/>
+    </bean>
+
+    <bean id="personProjectUpload" class="edu.neo4j.workshop.socialnetwork.uploading.PersonProjectUpload">
+        <constructor-arg index="0" value="${personProject.csv}"/>
+        <constructor-arg index="1" ref="projectDAO"/>
+        <constructor-arg index="2" ref="personDAO"/>
     </bean>
 </beans>
