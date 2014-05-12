@@ -67,4 +67,10 @@
         <constructor-arg index="1" ref="projectDAO"/>
         <constructor-arg index="2" ref="personDAO"/>
     </bean>
+
+    <bean id="projectCategoryUpload" class="edu.neo4j.workshop.socialnetwork.uploading.ProjectCategoryUpload">
+        <constructor-arg index="0" value="${projectCategory.csv}"/>
+        <constructor-arg index="1" ref="projectDAO"/>
+        <constructor-arg index="2" ref="workCategoryDAO"/>
+    </bean>
 </beans>

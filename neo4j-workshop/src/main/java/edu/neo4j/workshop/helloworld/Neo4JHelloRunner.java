@@ -48,6 +48,7 @@ public class Neo4JHelloRunner {
 
             projectLoader.loadProjects();
             projectLoader.loadPeopleProjectsAssociations();
+            projectLoader.loadProjectsCategoriesAssociations();
 
             transaction.success();
         }

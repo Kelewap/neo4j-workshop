@@ -70,3 +70,6 @@ with open("./../projects.csv", "wt") as file:
 
 projectsAssociations = AssociationAbstract.generateAssociations(projects, names, 3, 10)
 persistAssociates("./../personProject.csv", projectsAssociations)
+
+projectCategoriesAssociations = AssociationAbstract.generateAssociations(projects, categories, 1, 1)
+persistAssociates("./../projectCategories.csv", projectCategoriesAssociations)
