@@ -2,7 +2,6 @@ package edu.neo4j.workshop.helloworld;
 
 import edu.neo4j.workshop.socialnetwork.loaders.*;
 import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,25 +31,33 @@ public class Neo4JHelloRunner {
         this.projectLoader = projectLoader;
     }
 
-    public void createDb() throws IOException {
-        try (Transaction transaction = graphDatabaseService.beginTx()) {
+    public void createDb() throws IOException, InterruptedException {
+//        try (Transaction transaction = graphDatabaseService.beginTx()) {
+            System.out.println("Before person");
             personLoader.loadPeople();
+            System.out.println("Person loaded");
             personLoader.loadPeopleAssociations();
-
+            System.out.println("Associations loaded");
+//
             schoolLoader.loadSchools();
-            schoolLoader.loadSchoolAssociations();
-
-            workCategoryLoader.loadWorkCategories();
-            workCategoryLoader.loadWorkAssociations();
-
-            languageLoader.loadLanguages();
-            languageLoader.loadLearningRates();
-
-            projectLoader.loadProjects();
-            projectLoader.loadPeopleProjectsAssociations();
-            projectLoader.loadProjectsCategoriesAssociations();
-
-            transaction.success();
-        }
+            System.out.println("Schools loaded");
+//            schoolLoader.loadSchoolAssociations();
+//            System.out.println("Schools associations loaded");
+//
+//            workCategoryLoader.loadWorkCategories();
+//            workCategoryLoader.loadWorkAssociations();
+//            System.out.println("Work categories with ass loaded");
+//
+//            languageLoader.loadLanguages();
+//            languageLoader.loadLearningRates();
+//            System.out.println("Languages with ass loaded");
+//
+//            projectLoader.loadProjects();
+//            projectLoader.loadPeopleProjectsAssociations();
+//            projectLoader.loadProjectsCategoriesAssociations();
+//            System.out.println("Projects loaded");
+//
+//            transaction.success();
+//        }
     }
 }

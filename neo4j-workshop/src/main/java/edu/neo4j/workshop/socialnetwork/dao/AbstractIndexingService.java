@@ -18,8 +18,12 @@ public class AbstractIndexingService {
     }
 
     public Node getIndexedNode(Object indexedProperty){
+        System.out.println("In getIndexedNode");
         final Index<Node> index = graphDatabaseService.index().forNodes(abstractNodeFactory.getIndexName());
+        System.out.println("Obtained index");
 
-        return index.get(abstractNodeFactory.getIndexProperty(), indexedProperty).getSingle();
+        Node ret = index.get(abstractNodeFactory.getIndexProperty(), indexedProperty).getSingle();
+        System.out.println("Obtained value");
+        return ret;
     }
 }
