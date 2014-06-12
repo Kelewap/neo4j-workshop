@@ -23,8 +23,9 @@ public abstract class AbstractUpload<T> {
         this.schoolListPath = schoolListPath;
     }
 
-    public List<T> retrieveDataFromFile() throws IOException {
+    public List<T> retrieveDataFromFile(boolean cut) throws IOException {
         List<T> descriptions = new ArrayList<>();
+        int counter = 0;
         try(BufferedReader bufferedReader = new BufferedReader(new FileReader(schoolListPath))) {
             String line;
             while((line = bufferedReader.readLine()) != null) {
@@ -32,6 +33,13 @@ public abstract class AbstractUpload<T> {
                 descriptions.add(
                         getSupplier().get(split)
                 );
+                counter++;
+                if (counter == 2000000) {
+                    System.out.println("2000000 added");
+                    if (cut) {
+                        return descriptions;
+                    }
+                }
             }
         } catch (FileNotFoundException e) {
             LOGGER.log(Level.SEVERE, "File not found, unfortunetly :(", e);

@@ -41,22 +41,22 @@ public class Neo4JHelloRunner {
 //
             schoolLoader.loadSchools();
             System.out.println("Schools loaded");
-//            schoolLoader.loadSchoolAssociations();
-//            System.out.println("Schools associations loaded");
+            schoolLoader.loadSchoolAssociations();
+            System.out.println("Schools associations loaded");
+
+            workCategoryLoader.loadWorkCategories();
+            workCategoryLoader.loadWorkAssociations();
+            System.out.println("Work categories with ass loaded");
 //
-//            workCategoryLoader.loadWorkCategories();
-//            workCategoryLoader.loadWorkAssociations();
-//            System.out.println("Work categories with ass loaded");
+            languageLoader.loadLanguages();
+            languageLoader.loadLearningRates();
+            System.out.println("Languages with ass loaded");
 //
-//            languageLoader.loadLanguages();
-//            languageLoader.loadLearningRates();
-//            System.out.println("Languages with ass loaded");
-//
-//            projectLoader.loadProjects();
-//            projectLoader.loadPeopleProjectsAssociations();
-//            projectLoader.loadProjectsCategoriesAssociations();
-//            System.out.println("Projects loaded");
-//
+            projectLoader.loadProjects();
+            projectLoader.loadPeopleProjectsAssociations();
+            projectLoader.loadProjectsCategoriesAssociations();
+            System.out.println("Projects loaded");
+
 //            transaction.success();
 //        }
     }

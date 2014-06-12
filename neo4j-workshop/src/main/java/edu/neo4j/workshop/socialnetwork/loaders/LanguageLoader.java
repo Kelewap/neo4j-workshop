@@ -1,5 +1,6 @@
 package edu.neo4j.workshop.socialnetwork.loaders;
 
+import edu.neo4j.workshop.helloworld.ChunkTransactionManager;
 import edu.neo4j.workshop.socialnetwork.factories.LanguageFactory;
 import edu.neo4j.workshop.socialnetwork.services.PersonLanguageRelationshipService;
 import edu.neo4j.workshop.socialnetwork.uploading.LanguageDescription;
@@ -22,26 +23,34 @@ public class LanguageLoader {
     private final LanguageFactory languageFactory;
     private final PersonLanguageUpload personLanguageUpload;
     private final PersonLanguageRelationshipService personLanguageRelationshipService;
+    private final ChunkTransactionManager chunkTransactionManager;
 
     @Autowired
-    public LanguageLoader(LanguageUpload languageUpload, LanguageFactory languageFactory, PersonLanguageUpload personLanguageUpload, PersonLanguageRelationshipService personLanguageRelationshipService) {
+    public LanguageLoader(LanguageUpload languageUpload, LanguageFactory languageFactory, PersonLanguageUpload personLanguageUpload, PersonLanguageRelationshipService personLanguageRelationshipService, ChunkTransactionManager chunkTransactionManager) {
         this.languageUpload = languageUpload;
         this.languageFactory = languageFactory;
         this.personLanguageUpload = personLanguageUpload;
         this.personLanguageRelationshipService = personLanguageRelationshipService;
+        this.chunkTransactionManager = chunkTransactionManager;
     }
 
     public void loadLanguages() throws IOException {
-        final List<LanguageDescription> languageDescriptions = languageUpload.retrieveDataFromFile();
+        chunkTransactionManager.begin();
+        final List<LanguageDescription> languageDescriptions = languageUpload.retrieveDataFromFile(false);
         for (LanguageDescription description : languageDescriptions) {
             languageFactory.createLanguage(description.getShortcut(), description.getDescription());
+            chunkTransactionManager.bump();
         }
+        chunkTransactionManager.commit();
     }
 
     public void loadLearningRates() throws IOException {
-        final List<PersonLanguageRelationshipDescription> schoolRelationshipDescriptions = personLanguageUpload.retrieveDataFromFile();
+        chunkTransactionManager.begin();
+        final List<PersonLanguageRelationshipDescription> schoolRelationshipDescriptions = personLanguageUpload.retrieveDataFromFile(false);
         for (PersonLanguageRelationshipDescription schoolRelationshipDescription : schoolRelationshipDescriptions) {
             personLanguageRelationshipService.associate(schoolRelationshipDescription.getUsername(), schoolRelationshipDescription.getLanguage(), schoolRelationshipDescription.getLevel());
+            chunkTransactionManager.bump();
         }
+        chunkTransactionManager.commit();
     }
 }

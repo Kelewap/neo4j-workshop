@@ -1,5 +1,6 @@
 package edu.neo4j.workshop.socialnetwork.loaders;
 
+import edu.neo4j.workshop.helloworld.ChunkTransactionManager;
 import edu.neo4j.workshop.socialnetwork.factories.ProjectFactory;
 import edu.neo4j.workshop.socialnetwork.services.PersonProjectRelationshipService;
 import edu.neo4j.workshop.socialnetwork.services.ProjectCategoryRelationshipService;
@@ -25,36 +26,47 @@ public class ProjectLoader {
     private final PersonProjectRelationshipService personProjectRelationshipService;
     private final ProjectCategoryUpload projectCategoryUpload;
     private final ProjectCategoryRelationshipService projectCategoryRelationshipService;
+    private final ChunkTransactionManager chunkTransactionManager;
 
     @Autowired
-    public ProjectLoader(ProjectUpload projectUpload, ProjectFactory projectFactory, PersonProjectUpload personProjectUpload, PersonProjectRelationshipService personProjectRelationshipService, ProjectCategoryUpload projectCategoryUpload, ProjectCategoryRelationshipService projectCategoryRelationshipService) {
+    public ProjectLoader(ProjectUpload projectUpload, ProjectFactory projectFactory, PersonProjectUpload personProjectUpload, PersonProjectRelationshipService personProjectRelationshipService, ProjectCategoryUpload projectCategoryUpload, ProjectCategoryRelationshipService projectCategoryRelationshipService, ChunkTransactionManager chunkTransactionManager) {
         this.projectUpload = projectUpload;
         this.projectFactory = projectFactory;
         this.personProjectUpload = personProjectUpload;
         this.personProjectRelationshipService = personProjectRelationshipService;
         this.projectCategoryUpload = projectCategoryUpload;
         this.projectCategoryRelationshipService = projectCategoryRelationshipService;
+        this.chunkTransactionManager = chunkTransactionManager;
     }
 
     public void loadProjects() throws IOException {
-        final List<ProjectDescription> descriptions = projectUpload.retrieveDataFromFile();
+        chunkTransactionManager.begin();
+        final List<ProjectDescription> descriptions = projectUpload.retrieveDataFromFile(false);
         for (ProjectDescription description : descriptions) {
             projectFactory.createProject(description.getName(), description.getStartTime(), description.getEndTime());
+            chunkTransactionManager.bump();
         }
+        chunkTransactionManager.commit();
     }
 
     public void loadPeopleProjectsAssociations() throws IOException {
-        final List<PersonProjectRelationshipDescription> knowingRelationshipDescriptions = personProjectUpload.retrieveDataFromFile();
+        chunkTransactionManager.begin();
+        final List<PersonProjectRelationshipDescription> knowingRelationshipDescriptions = personProjectUpload.retrieveDataFromFile(false);
         for (PersonProjectRelationshipDescription knowingRelationshipDescription : knowingRelationshipDescriptions) {
             personProjectRelationshipService.associate(knowingRelationshipDescription.getPerson(), knowingRelationshipDescription.getProject());
+            chunkTransactionManager.bump();
         }
+        chunkTransactionManager.commit();
     }
 
     public void loadProjectsCategoriesAssociations() throws IOException {
-        final List<ProjectCategoryRelationshipDescription> personCategoryDescriptions = projectCategoryUpload.retrieveDataFromFile();
+        chunkTransactionManager.begin();
+        final List<ProjectCategoryRelationshipDescription> personCategoryDescriptions = projectCategoryUpload.retrieveDataFromFile(false);
         for (ProjectCategoryRelationshipDescription personCategoryDescription : personCategoryDescriptions) {
             projectCategoryRelationshipService.associate(personCategoryDescription.getProject(), personCategoryDescription.getCategory());
+            chunkTransactionManager.bump();
         }
+        chunkTransactionManager.commit();
     }
 
 }

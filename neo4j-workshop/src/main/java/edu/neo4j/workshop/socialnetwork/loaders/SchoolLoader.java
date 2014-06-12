@@ -37,7 +37,7 @@ public class SchoolLoader {
     }
 
     public void loadSchools() throws IOException {
-        final List<SchoolDescription> schoolDescriptions = schoolUpload.retrieveDataFromFile();
+        final List<SchoolDescription> schoolDescriptions = schoolUpload.retrieveDataFromFile(false);
         chunkTransactionManager.begin();
         for (SchoolDescription description : schoolDescriptions) {
             schoolFactory.createSchool(description.getAbbreviation(), description.getName());
@@ -48,13 +48,13 @@ public class SchoolLoader {
 
     public void loadSchoolAssociations() throws IOException {
         chunkTransactionManager.begin();
-        final List<SchoolRelationshipDescription> schoolRelationshipDescriptions = studyingRelationshipUpload.retrieveDataFromFile();
+        final List<SchoolRelationshipDescription> schoolRelationshipDescriptions = studyingRelationshipUpload.retrieveDataFromFile(false);
         for (SchoolRelationshipDescription schoolRelationshipDescription : schoolRelationshipDescriptions) {
             studentSchoolRelationshipService.associate(schoolRelationshipDescription.getPerson(), schoolRelationshipDescription.getSchool(), schoolRelationshipDescription.getRelationship());
             chunkTransactionManager.bump();
         }
 
-        final List<SchoolRelationshipDescription> schoolRelationshipDescriptions1 = graduatedRelationshipUpload.retrieveDataFromFile();
+        final List<SchoolRelationshipDescription> schoolRelationshipDescriptions1 = graduatedRelationshipUpload.retrieveDataFromFile(false);
         for (SchoolRelationshipDescription schoolRelationshipDescription : schoolRelationshipDescriptions1) {
             studentSchoolRelationshipService.associate(schoolRelationshipDescription.getPerson(), schoolRelationshipDescription.getSchool(), schoolRelationshipDescription.getRelationship());
             chunkTransactionManager.bump();

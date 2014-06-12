@@ -1,6 +1,8 @@
 package edu.neo4j.workshop.socialnetwork.uploading;
 
 import com.google.common.base.Splitter;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Transaction;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -21,28 +23,34 @@ public abstract class AbstractConcurrentUploader<T> implements Runnable {
     protected final String schoolListPath;
     private final BlockingQueue<T> blockingQueue;
     private final AtomicBoolean isDone;
+    private final GraphDatabaseService graphDatabaseService;
 
-    public AbstractConcurrentUploader(String schoolListPath, BlockingQueue<T> blockingQueue, AtomicBoolean atomicBoolean) {
+    public AbstractConcurrentUploader(String schoolListPath, BlockingQueue<T> blockingQueue, AtomicBoolean atomicBoolean, GraphDatabaseService graphDatabaseService) {
         this.schoolListPath = schoolListPath;
         this.blockingQueue = blockingQueue;
         this.isDone = atomicBoolean;
+        this.graphDatabaseService = graphDatabaseService;
     }
 
     public void run() {
+        final Transaction transaction = graphDatabaseService.beginTx();
         try(BufferedReader bufferedReader = new BufferedReader(new FileReader(schoolListPath))) {
             String line;
             while((line = bufferedReader.readLine()) != null) {
                 final List<String> split = splitter.splitToList(line);
-                blockingQueue.add(
+                blockingQueue.put(
                         getSupplier().get(split)
                 );
-                System.out.println("Added to queue...!");
             }
         } catch (FileNotFoundException e) {
             LOGGER.log(Level.SEVERE, "File not found, unfortunetly :(", e);
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Problem with IO", e);
+        } catch (InterruptedException e) {
+            LOGGER.log(Level.SEVERE, "interrupted", e);
         }
+        transaction.success();
+        transaction.close();
         this.isDone.set(true);
     }
 
